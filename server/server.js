@@ -4,7 +4,10 @@ require('dotenv').config();
 const routes = require('./routes');
 
 const app = express();
+
+//middleware
 app.use(helmet());
+app.use(express.static('../public'));
 
 
 //Connect to DB
