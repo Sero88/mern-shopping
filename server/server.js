@@ -17,12 +17,24 @@ mongoose.connect(process.env.DB_URI, {useNewUrlParser: true, useUnifiedTopology:
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-//once connected proceed with setting up server
+//once connected to the db - set up server
 db.once('open', () => {
     console.log('db connection: success');
     const port = process.env.PORT || 3000;
 
-    routes.setRoutes(app);
+    //set routes
+    const productRoutes = require('./routes/products');
+    console.log(productRoutes.stack);
+
+    app.get('/test', (req, res) => {
+        return res.status(400).json('test false');
+    })
+    
+    app.get('/', (req, res) => {
+        return res.json(app._router.stack);
+    });
+
+    app.use('/api/products', productRoutes);
     app.listen(port, () => console.log('Listening on port:' + port));
 });
 

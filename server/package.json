@@ -20,6 +20,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "helmet": "^3.23.1",
-    "mongoose": "^5.9.20"
+    "mongoose": "^5.9.20",
+    "passport-google-oauth20": "^2.0.0"
   }
 }
