@@ -23,8 +23,13 @@ class Products extends React.Component{
     }
 
     async makeApiCall(){
-        const products = await axios.get('http://localhost:5000/api/products');
-        return products.data;
+        try{
+            const products = await axios.get('http://localhost:5000/api/products');
+            return products.data;
+        } catch(e){
+            console.error('axios: ' + e);
+        }
+        
     }
 
     render(){
