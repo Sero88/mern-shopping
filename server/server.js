@@ -1,14 +1,26 @@
 const express = require('express');
+const session = require('express-session');
 const cors = require('cors');
 const helmet = require('helmet');
-require('dotenv').config();
+const auth = require('./modules/auth.module');
 
+require('dotenv').config();
 const app = express();
 
 //middleware
 app.use(helmet());
 app.use(cors());
-//app.use(express.static('../client/public'));
+//app.use(express.static('../client/build/'));
+app.use(express.static('../public/'));
+app.use(session ({
+    secret: process.env.SESSION_SECRET,
+    resave: true, 
+    saveUninitialized: true
+    })
+);
+
+//authentication
+auth(app);
 
 
 //Connect to DB
@@ -26,9 +38,12 @@ db.once('open', () => {
     //set routes
     const mainRoutes = require('./routes/main');
     const productRoutes = require('./routes/products');
+    const authRoutes = require('./routes/auth');
 
     app.use('/', mainRoutes);
     app.use('/api/products', productRoutes);
+    app.use('/auth', authRoutes);
+
     app.listen(port, () => console.log('Listening on port:' + port));
 });
 

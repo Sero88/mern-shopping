@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const Product = require('../models/product.model');
-const { model } = require('../models/product.model');
+
 
 router.route('/').get( (req, res) => {
     Product.find()
