@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 const passport = require('passport');
 
 
-router.get('/google/', passport.authenticate('google', {scope: ['profile']} ) );
+router.get('/google/', passport.authenticate('google', {scope: ['profile', 'email']}) );
 
 router.get('/google/callback/', passport.authenticate('google', {failureRedirect: '/'}), 
     (req, res) => {
@@ -11,5 +11,6 @@ router.get('/google/callback/', passport.authenticate('google', {failureRedirect
     }
 );
 
+//router.get('/user')
 
 module.exports = router;

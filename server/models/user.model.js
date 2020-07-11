@@ -6,7 +6,7 @@ const userSchema = new Schema({
     firstName: String, 
     lastName: String,
     email: String, 
-    lastLogin: Date
+    lastLogin: Date,
 }, {
     timestamps: true
 });

@@ -1,11 +1,22 @@
 import React from 'react';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import Products from './components/products';
+
 
 import './App.css';
 
 function App(props) {
   return (
-    <div className="App">
+    
+    <Router>
+      <Route path="/products" component={Products} /> 
+      <a href="/products">Go to Products</a>
+      <Link to="/products">--Go to Products</Link>
+    </Router>
+    
+    
+    /*
+         <div className="App">
       <header className="App-header">
         <p>
           Name of Store with Logo
@@ -23,6 +34,8 @@ function App(props) {
         <Products />
       </main>
     </div>
+    */
+
   );
 }
 

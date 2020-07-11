@@ -2,10 +2,10 @@ const router = require('express').Router();
 const Product = require('../models/product.model');
 
 
-router.route('/').get( (req, res) => {
-    Product.find()
-        .then( products => res.json(products) )
-        .catch( err => res.status(400).json( 'ERROR: ' + err) );
+router.route('/test').get( (req, res) => {
+    console.log(req.user);
+   
+   res.json('done ' + req.isAuthenticated());
 });
 
 router.route('/:id').get( (req, res) => {
@@ -15,8 +15,10 @@ router.route('/:id').get( (req, res) => {
 });
 
 
-router.get('/test', (req, res) => {
-    res.json('test');
+router.route('/').get( (req, res) => {
+    Product.find()
+        .then( products => res.json(products) )
+        .catch( err => res.status(400).json( 'ERROR: ' + err) );
 });
 
 module.exports = router;
