@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const path = require('path');
 const cors = require('cors');
 const helmet = require('helmet');
 const auth = require('./modules/auth.module');
@@ -10,8 +11,8 @@ const app = express();
 //middleware
 app.use(helmet());
 app.use(cors());
-//app.use(express.static('../client/build/'));
-app.use(express.static('../public/'));
+app.use(express.static('../client/build/'));
+//app.use(express.static('../public/'));
 app.use(session ({
     secret: process.env.SESSION_SECRET,
     resave: true, 
@@ -39,10 +40,16 @@ db.once('open', () => {
     const mainRoutes = require('./routes/main');
     const productRoutes = require('./routes/products');
     const authRoutes = require('./routes/auth');
+    const usersRoutes = require('./routes/users');
 
     app.use('/', mainRoutes);
     app.use('/api/products', productRoutes);
     app.use('/auth', authRoutes);
+    app.use('/users', usersRoutes);
+
+    app.get('*', (req, res) => {       
+        res.sendFile(path.join(__dirname, './../client/build/', 'index.html' ));
+    })
 
     app.listen(port, () => console.log('Listening on port:' + port));
 });
