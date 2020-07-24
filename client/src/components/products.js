@@ -1,12 +1,50 @@
 import React from 'react';
 import axios from 'axios';
 
-class Products extends React.Component{
+function ProductImage(props){
+    return (
+        <img src={'/images/art/' + props.imageName} alt={props.imageTitle} />
+    );
+}
+
+function ProductDescription(props){
+    return (
+        <div className="product-description">
+            <p>{props.price}</p>
+            <p>{props.title} - <span>{props.artist}</span></p>
+            <p>{props.description}</p>            
+        </div>
+    );
+}
+
+function Product(props){
+    console.dir(props);
+    console.log(props);
+
+    return(
+        <div className="product">
+            <ProductImage imageName={props.productData.imageName} imageTitle={props.productData.name} />
+            <ProductDescription 
+                title={props.productData.name} 
+                description={props.productData.description} 
+                quantity={props.productData.quantity}  
+                price={props.productData.price.$numberDecimal}    
+                artist={props.productData.artist}          
+            />
+
+            <button onClick={()=>(props.addToCart({...props.productData}))}>Add to cart</button>
+           
+        </div>        
+    );
+}
+
+class ProductGallery extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            products: {}
+            products: false
         }
+
         this.getProducts = this.getProducts.bind(this);
     }
 
@@ -24,7 +62,7 @@ class Products extends React.Component{
 
     async makeApiCall(){
         try{
-            const products = await axios.get('http://localhost:5000/api/products');
+            const products = await axios.get('/api/products');
             return products.data;
         } catch(e){
             console.error('axios: ' + e);
@@ -33,11 +71,18 @@ class Products extends React.Component{
     }
 
     render(){
-        console.log(this.state.products);
-        const products = this.state.products.length ? this.state.products.map((product, index) =>{console.log(product); return <p>{product.name}</p>}) : '';
-        console.log(products);
-        return <div>{products}</div>
+        const products = [];  
+       
+        if(this.state.products && this.state.products.length){
+         this.state.products.forEach(        
+            (product, index) => {
+                //console.dir(product, {...product});       
+                products.push(<Product productData={product} addToCart={this.props.addToCart}> <p>test</p></Product>);                                        
+            });
+        }
+
+        return <div className="product-gallery">{products}</div>
     }
 }
 
-export default Products;
+export default ProductGallery;

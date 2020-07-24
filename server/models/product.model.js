@@ -8,6 +8,7 @@ const productSchema = new Schema({
     quantity: Number, 
     artist: String,
     categoryId: String, 
+    price: Schema.Types.Decimal128
 }, {
     timestamps: true
 });
