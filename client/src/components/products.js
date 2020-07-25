@@ -86,19 +86,19 @@ class ProductGallery extends React.Component{
             return products.data;
         } catch(e){
             console.error('axios: ' + e);
+            return null;
         }
         
     }
 
     render(){
         const products = [];  
-        console.log(this.props.cartData);
-       
+        console.log(this.state.products);
         if(this.state.products && this.state.products.length){
          this.state.products.forEach(        
             (product, index) => {                           
                 products.push(
-                    <Product 
+                    <Product key={"product"+product.name} 
                         productData={product} 
                         addToCart={this.props.addToCart} 
                         cartData={this.props.cartData}> 
@@ -106,6 +106,8 @@ class ProductGallery extends React.Component{
                     </Product>
                     );                                                        
             });
+        } else if(this.state.products == null){
+           products.push(<p className="error">Something went wrong. Unable to retrieve products.</p>)
         }
 
         return <div className="product-gallery">{products}</div>

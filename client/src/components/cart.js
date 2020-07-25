@@ -10,8 +10,7 @@ class Cart extends React.Component{
             <div>
                 {this.props.cartData.map(
                     (item) => (
-                        <p>{item.itemData.name} <span>qty.{item.quantity}</span></p>)
-                        
+                        <p key={'cart'+item.itemData.name}>{item.itemData.name} <span>qty.{item.quantity}</span></p>)                        
                     )}
             </div>
         );

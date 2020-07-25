@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import axios from 'axios';
-import ProductGallery from './products';
+const ProductGallery = React.lazy( () => import ('./products') );
 
 class Home extends React.Component{
     constructor(props){
@@ -11,7 +11,9 @@ class Home extends React.Component{
         return (
             <div>
                 <h1>Shop</h1>
-                <ProductGallery cartData={this.props.cartData} addToCart={this.props.addToCart}/>
+                <Suspense fallback={<div>Loading products...</div>}>
+                    <ProductGallery cartData={this.props.cartData} addToCart={this.props.addToCart}/>
+                </Suspense> 
             </div>
             
         );

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import axios from 'axios';
-import Cart from './cart';
+//import Cart from './cart';
+const Cart = React.lazy( () => import('./cart') ); 
 
 function CurrentUser(props){
     return (
@@ -56,7 +57,11 @@ class UserBar extends React.Component{
             <div>
                 <CurrentUser username={firstName} />
                 <UserLogin authenticated={this.state.authenticated} />
-                <Cart cartData={this.props.cartData} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <Cart cartData={this.props.cartData} />
+                </Suspense>
+                
+               
             </div>
         );
     }
