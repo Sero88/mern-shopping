@@ -17,13 +17,28 @@ function ProductDescription(props){
     );
 }
 
-function Product(props){
-    console.dir(props);
+function AddProductButton(props){
     console.log(props);
+    //check to see if item is in cart - get the quantity in cart  
+    const itemIndex = props.cartData.findIndex( (cartItem) => "itemData" in cartItem && cartItem.itemData._id === props.productData._id );
+    const cartQuantity = itemIndex >= 0  ? props.cartData[itemIndex].quantity : 0;
+    
+    // can the add item button can be displayed - must not go over stock quantity  
+    if(props.productData.stock > 0  && props.productData.stock > cartQuantity){
+        return <button onClick={()=>(props.addToCart({...props.productData}))}>Add to cart</button>
+    } else{
+        return <p>Out of Stock</p>
+    }
+}
 
+function Product(props){
     return(
         <div className="product">
-            <ProductImage imageName={props.productData.imageName} imageTitle={props.productData.name} />
+            <ProductImage 
+                imageName={props.productData.imageName} 
+                imageTitle={props.productData.name} 
+            />
+
             <ProductDescription 
                 title={props.productData.name} 
                 description={props.productData.description} 
@@ -32,7 +47,12 @@ function Product(props){
                 artist={props.productData.artist}          
             />
 
-            <button onClick={()=>(props.addToCart({...props.productData}))}>Add to cart</button>
+            <AddProductButton 
+                addToCart={props.addToCart} 
+                stock={props.productData.stock} 
+                productData={props.productData} 
+                cartData={props.cartData}    
+            />
            
         </div>        
     );
@@ -72,12 +92,19 @@ class ProductGallery extends React.Component{
 
     render(){
         const products = [];  
+        console.log(this.props.cartData);
        
         if(this.state.products && this.state.products.length){
          this.state.products.forEach(        
-            (product, index) => {
-                //console.dir(product, {...product});       
-                products.push(<Product productData={product} addToCart={this.props.addToCart}> <p>test</p></Product>);                                        
+            (product, index) => {                           
+                products.push(
+                    <Product 
+                        productData={product} 
+                        addToCart={this.props.addToCart} 
+                        cartData={this.props.cartData}> 
+                            <p>test</p>
+                    </Product>
+                    );                                                        
             });
         }
 

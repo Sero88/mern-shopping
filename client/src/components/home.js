@@ -11,7 +11,7 @@ class Home extends React.Component{
         return (
             <div>
                 <h1>Shop</h1>
-                <ProductGallery addToCart={this.props.addToCart}/>
+                <ProductGallery cartData={this.props.cartData} addToCart={this.props.addToCart}/>
             </div>
             
         );

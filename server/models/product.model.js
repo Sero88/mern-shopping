@@ -5,7 +5,7 @@ const productSchema = new Schema({
     name: String, 
     description: String, 
     imageName: String, 
-    quantity: Number, 
+    stock: Number, 
     artist: String,
     categoryId: String, 
     price: Schema.Types.Decimal128

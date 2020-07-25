@@ -28,8 +28,7 @@ class UserBar extends React.Component{
 
     async makeApiCall(){
         try{
-            const userData = await axios.get('/users');
-            console.log('data ', userData.data);
+            const userData = await axios.get('/users');           
             return userData.data;
         }
         catch(e){

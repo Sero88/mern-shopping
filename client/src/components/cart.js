@@ -8,7 +8,11 @@ class Cart extends React.Component{
     render(){
         return(
             <div>
-                {this.props.cartData.map((item) => <p>{item.name}</p>)}
+                {this.props.cartData.map(
+                    (item) => (
+                        <p>{item.itemData.name} <span>qty.{item.quantity}</span></p>)
+                        
+                    )}
             </div>
         );
     }
