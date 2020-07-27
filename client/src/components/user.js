@@ -58,7 +58,7 @@ class UserBar extends React.Component{
                 <CurrentUser username={firstName} />
                 <UserLogin authenticated={this.state.authenticated} />
                 <Suspense fallback={<div>Loading...</div>}>
-                    <Cart cartData={this.props.cartData} />
+                    <Cart cartData={this.props.cartData} removeFromCart={this.props.removeFromCart} />
                 </Suspense>
                 
                

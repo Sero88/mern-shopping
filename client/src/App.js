@@ -16,11 +16,12 @@ class App extends React.Component {
 
     this.cartCookie = 'cartCookie';
     this.addToCart = this.addToCart.bind(this);
+    this.removeFromCart = this.removeFromCart.bind(this);
   }
 
   componentDidMount(){
     //get the cookie
-    const {cookies} = this.props;          
+    const {cookies} = this.props;         
     const cookieData = cookies.get(this.cartCookie) || [];
 
     //if cookie data exists update cart state
@@ -33,9 +34,8 @@ class App extends React.Component {
 
 
   addToCart(item) {
-    //get the cookie
-    const {cookies} = this.props;
-    const cartData = cookies.get(this.cartCookie) || [];
+    //get the cookie    
+    const cartData = this.state.cart;
 
     //does the item already exist - if so increase cart quantity, else add to cart
     const itemIndex = cartData.findIndex( (cartItem) => "itemData" in cartItem && cartItem.itemData._id === item._id );
@@ -51,6 +51,7 @@ class App extends React.Component {
     }
 
     //set the cookie
+    const {cookies} = this.props;
     cookies.set(this.cartCookie, cartData, {path: '/', sameSite:'strict'});
 
     //update the state
@@ -60,13 +61,40 @@ class App extends React.Component {
 
   }
 
+  removeFromCart(item){
+    const cartData = this.state.cart;
+    
+    //get the item's cart index 
+    const itemIndex = cartData.findIndex( (item) => item.itemData._id == item.itemData._id);
+
+    if(itemIndex >= 0){
+      const quantity = cartData[itemIndex].quantity;
+
+      if(quantity > 1){
+        cartData[itemIndex].quantity--;
+      } else{
+        cartData.splice(itemIndex, 1);
+      }
+    }
+
+    //set the cookie
+    const {cookies} = this.props;
+    cookies.set(this.cartCookie, cartData, {path: '/', sameSite:'strict'});   
+    
+    this.setState({
+      cart: cartData
+    });
+    
+    console.log(cartData);
+  }
+
   render(){
 
     return (
       <CookiesProvider>
         <Router>
     
-          <UserBar cartData={this.state.cart}/> 
+          <UserBar cartData={this.state.cart} removeFromCart={this.removeFromCart}/> 
 
           {/* Routes */}
           <Route exact={true} path="/" render={ () => ( <Home cartData={this.state.cart} addToCart={this.addToCart} /> ) } />   

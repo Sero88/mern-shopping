@@ -7,10 +7,14 @@ class Cart extends React.Component{
     
     render(){
         return(
-            <div>
+            <div className="cart">
                 {this.props.cartData.map(
                     (item) => (
-                        <p key={'cart'+item.itemData.name}>{item.itemData.name} <span>qty.{item.quantity}</span></p>)                        
+                        <div className="cartItem" key={'cart'+item.itemData.name} > 
+                            <p>{item.itemData.name} <span>qty.{item.quantity}</span></p>                        
+                            <button onClick={() => this.props.removeFromCart(item)}>Remove Item </button>                     
+                            </div>
+                    )
                     )}
             </div>
         );
