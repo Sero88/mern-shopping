@@ -3,6 +3,8 @@ import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {CookiesProvider, withCookies} from 'react-cookie';
 import Home from './components/home';
 import UserBar from './components/user';
+import Checkout from './components/checkout';
+
 
 
 import './App.css';
@@ -11,12 +13,14 @@ class App extends React.Component {
   constructor(props){
     super(props);    
     this.state = {
-      cart:[]
+      cart:[], 
+      user: {}
     }
 
     this.cartCookie = 'cartCookie';
     this.addToCart = this.addToCart.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this);
+    this.updateUser = this.updateUser.bind(this);
   }
 
   componentDidMount(){
@@ -88,17 +92,23 @@ class App extends React.Component {
     console.log(cartData);
   }
 
+  updateUser(userData){
+    this.setState(
+      {user: userData}
+    );
+  }
+
   render(){
 
     return (
       <CookiesProvider>
         <Router>
     
-          <UserBar cartData={this.state.cart} removeFromCart={this.removeFromCart}/> 
+          <UserBar userData={this.state.user} cartData={this.state.cart} removeFromCart={this.removeFromCart}/> 
 
           {/* Routes */}
           <Route exact={true} path="/" render={ () => ( <Home cartData={this.state.cart} addToCart={this.addToCart} /> ) } />   
-          
+          <Route exact={true} path="/checkout" render={ () => (<Checkout cartData={this.state.cart} />) } />
         </Router>
       </CookiesProvider>
       /*

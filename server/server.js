@@ -41,11 +41,13 @@ db.once('open', () => {
     const productRoutes = require('./routes/products');
     const authRoutes = require('./routes/auth');
     const usersRoutes = require('./routes/users');
+    const paymentRoutes = require('./routes/payment');
 
     app.use('/', mainRoutes);
     app.use('/api/products', productRoutes);
     app.use('/auth', authRoutes);
     app.use('/users', usersRoutes);
+    app.use('/payments', paymentRoutes);
 
     app.get('*', (req, res) => {       
         res.sendFile(path.join(__dirname, './../client/build/', 'index.html' ));
