@@ -14,7 +14,7 @@ class App extends React.Component {
     super(props);    
     this.state = {
       cart:[], 
-      user: {}
+      user: {userData:{firstName:'Guest'}, authenticated: false}
     }
 
     this.cartCookie = 'cartCookie';
@@ -23,7 +23,7 @@ class App extends React.Component {
     this.updateUser = this.updateUser.bind(this);
   }
 
-  componentDidMount(){
+  componentWillMount(){
     //get the cookie
     const {cookies} = this.props;         
     const cookieData = cookies.get(this.cartCookie) || [];
@@ -92,9 +92,9 @@ class App extends React.Component {
     console.log(cartData);
   }
 
-  updateUser(userData){
+  updateUser(userData, isAuth){
     this.setState(
-      {user: userData}
+      {user: {userData:userData, authenticated: isAuth} }
     );
   }
 
@@ -104,11 +104,11 @@ class App extends React.Component {
       <CookiesProvider>
         <Router>
     
-          <UserBar userData={this.state.user} cartData={this.state.cart} removeFromCart={this.removeFromCart}/> 
+          <UserBar user={this.state.user} updateUser={this.updateUser} cartData={this.state.cart} removeFromCart={this.removeFromCart}/> 
 
           {/* Routes */}
           <Route exact={true} path="/" render={ () => ( <Home cartData={this.state.cart} addToCart={this.addToCart} /> ) } />   
-          <Route exact={true} path="/checkout" render={ () => (<Checkout cartData={this.state.cart} />) } />
+          <Route exact={true} path="/checkout" render={ () => (<Checkout cartData={this.state.cart} user={this.state.user} />) } />
         </Router>
       </CookiesProvider>
       /*

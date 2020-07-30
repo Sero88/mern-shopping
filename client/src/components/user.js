@@ -20,11 +20,7 @@ function UserLogin(props){
 
 class UserBar extends React.Component{
     constructor(props){
-        super(props);
-        this.state = {
-            user: '',
-            authenticated: false
-        }        
+        super(props);    
     }
 
     async makeApiCall(){
@@ -41,27 +37,21 @@ class UserBar extends React.Component{
         this.makeApiCall()
             .then( (userData) => {
                 if(userData && 'firstName' in userData){
-                    this.setState({
-                        user: userData,
-                        authenticated: true
-                    })
-                }
-                
+                    console.log(userData);
+                    this.props.updateUser(userData, true);
+                }                
             })
             .catch( (e) => console.error(e));
     }
 
     render(){
-        const firstName = this.state.user.firstName ? this.state.user.firstName : 'Guest';
         return (
             <div>
-                <CurrentUser username={firstName} />
-                <UserLogin authenticated={this.state.authenticated} />
+                <CurrentUser username={this.props.user.userData.firstName} />
+                <UserLogin authenticated={this.props.user.authenticated} />
                 <Suspense fallback={<div>Loading...</div>}>
                     <Cart cartData={this.props.cartData} removeFromCart={this.props.removeFromCart} />
-                </Suspense>
-                
-               
+                </Suspense>                               
             </div>
         );
     }

@@ -23,29 +23,33 @@ class PaymentForm extends React.Component{
     }
 
     componentDidMount(){
-        axios.post('/payments/create-payment-intent')
-            .then( (response) => {
-                this.setState({secret: response.data});
-                console.log(this.state);
-            })
-            .catch( (error) => console.error('Unable to begin payment process', error) );
+        console.log(this.props);
+        
+        axios.post('/payments/create-payment-intent', {items:this.props.cartData})
+        .then( (response) => {
+            this.setState({secret: response.data.clientSecret});     
+            console.log(response.data);           
+        })
+        .catch( (error) => console.error('Unable to begin payment process', error) );
+        
+       
     }
 
     handleSubmit = async(event) => {
         event.preventDefault();
 
-        const {stripe, elements, cartData} = this.props;
+        const {stripe, elements, cartData, user} = this.props;
         console.log(this.props);
 
         if(!stripe || !elements){
             return;
         }
 
-        const result = await stripe.confirmCardPayment('{CLIENT_SECRET', {
+        const result = await stripe.confirmCardPayment(this.state.secret, {
             payment_method: {
                 card: elements.getElement(CardElement),
                 billing_details:{
-                    name: 'Jenny Rosen',
+                    name: user.userData.FirstName,
                 },
             }
         });
@@ -64,7 +68,7 @@ class PaymentForm extends React.Component{
             
             <form onSubmit={this.handleSubmit}>
                 <CardSection />
-                <button disabled={!this.props.stripe}>Confirm order</button>
+                <button disabled={!this.props.stripe || !this.state.secret}>Confirm order</button>
             </form>
         );
     }
@@ -78,20 +82,28 @@ class Checkout extends React.Component{
     }
 
     render(){
-        return(
-            <div className="page-container">
-                <h1>Checkout</h1>
-                <div className="payment-form">
-                    <Elements stripe={promise}> 
-                        <ElementsConsumer>
-                            {({stripe, elements}) => (                                
-                                <PaymentForm cartData={this.props.cartData} stripe={stripe} elements={elements} />
-                            )}
-                        </ElementsConsumer>                                    
-                    </Elements>
-                </div>                
-            </div>
-        );
+        
+        //if cart is empty - show message, else show the payment form
+        if(this.props.cartData.length <= 0){
+            return <div>Cart is empty</div>;
+        } else{
+            return(
+                <div className="page-container">
+                    <h1>Checkout</h1>
+                    <div className="payment-form">
+                        <Elements stripe={promise}> 
+                            <ElementsConsumer>
+                                {({stripe, elements}) => (                                
+                                    <PaymentForm cartData={this.props.cartData} stripe={stripe} elements={elements} user={this.props.user} />
+                                )}
+                            </ElementsConsumer>                                    
+                        </Elements>
+                    </div>                
+                </div>
+            );
+        }
+
+        
     }
 }
 
