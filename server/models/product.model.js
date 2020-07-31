@@ -15,4 +15,19 @@ const productSchema = new Schema({
 
 const Product = mongoose.model('Product', productSchema, 'Products');
 
+Product.reduceStock = (items) => {    
+    items.forEach( async (item) => {
+        const product = await Product.find({_id: item.id});
+        product[0].stock -= item.quantity;
+        product[0].save({timestamps: false});
+    })
+}
+/*
+User.findOneAndUpdate({thirdPartyId: profile.id}, user, {upsert:true, new:true}, 
+    (err, doc) => {
+        console.log('saved', doc);
+        return cb(null, doc);
+    }
+);*/
+
 module.exports = Product;

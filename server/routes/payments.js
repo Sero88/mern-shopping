@@ -1,9 +1,7 @@
+const { session } = require('passport');
+
 const stripe = require('stripe')(process.env.STRIPE_SECRET);
 const router = require('express').Router();
-
-function calculateOrderAmount(items){
-    return 25625;
-}
 
 router.post('/create-payment-intent', async (req, res) => {
     
@@ -14,22 +12,26 @@ router.post('/create-payment-intent', async (req, res) => {
     }
 
     //get the total of the items
-    const total = req.body.items.reduce( (total, item) => {
-        total += item.quantity * item.itemData.price.$numberDecimal;
-        return total * 100; //amount in smallest currency unit accepted in USD: cents
+    const total = req.body.items.reduce( (total, item) => {        
+        total += item.quantity * item.itemData.price.$numberDecimal;       
+        return total; 
     }, 0);
 
     //submit the paymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: total,
+        amount: total * 100, //amount in smallest currency unit accepted in USD: cents
         currency: "usd",
         //stripe integration guide verification 
         //TODO  remove later
         metadata:{integration_check: 'accept_a_payment'}
     });
 
+    //add secret to the session
+    req.session.paymentSecret = paymentIntent.client_secret;
+
     res.send({
-        clientSecret: paymentIntent.client_secret,        
+        clientSecret: paymentIntent.client_secret,
+        total: total            
     });
 });
 

@@ -20,8 +20,10 @@ class App extends React.Component {
     this.cartCookie = 'cartCookie';
     this.addToCart = this.addToCart.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this);
+    this.removeCartData = this.removeCartData.bind(this);
     this.updateUser = this.updateUser.bind(this);
   }
+
 
   componentWillMount(){
     //get the cookie
@@ -65,6 +67,7 @@ class App extends React.Component {
 
   }
 
+
   removeFromCart(item){
     const cartData = this.state.cart;
     
@@ -79,7 +82,7 @@ class App extends React.Component {
       } else{
         cartData.splice(itemIndex, 1);
       }
-    }
+    }    
 
     //set the cookie
     const {cookies} = this.props;
@@ -92,14 +95,25 @@ class App extends React.Component {
     console.log(cartData);
   }
 
+
+  removeCartData(){
+    const {cookies} = this.props;
+    cookies.set(this.cartCookie, {},{path: '/', sameSite:'strict'} );
+    this.setState({
+      cart: []
+    });
+
+  }
+
+
   updateUser(userData, isAuth){
     this.setState(
       {user: {userData:userData, authenticated: isAuth} }
     );
   }
 
-  render(){
 
+  render(){
     return (
       <CookiesProvider>
         <Router>
@@ -108,7 +122,7 @@ class App extends React.Component {
 
           {/* Routes */}
           <Route exact={true} path="/" render={ () => ( <Home cartData={this.state.cart} addToCart={this.addToCart} /> ) } />   
-          <Route exact={true} path="/checkout" render={ () => (<Checkout cartData={this.state.cart} user={this.state.user} />) } />
+          <Route exact={true} path="/checkout" render={ () => (<Checkout cartData={this.state.cart} removeCartData={this.removeCartData} user={this.state.user} />) } />
         </Router>
       </CookiesProvider>
       /*
