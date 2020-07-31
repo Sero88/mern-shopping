@@ -6,7 +6,16 @@ import axios from 'axios';
 //load stripe
 const promise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
 
+//show errors to the user
+function PaymentError(props){
+    if(props.error){
+        return <div className="error">{props.error}</div>
+    } else{
+        return '';
+    }
+}
 
+//render stripe card section
 function CardSection(props){
     return (
         <label>
@@ -19,60 +28,90 @@ function CardSection(props){
 class PaymentForm extends React.Component{
     constructor(props){
         super(props);
-        this.state = {secret:''};
+        this.state = {
+            secret:'',
+            error: '',
+            canSubmit: true,
+        };
     }
 
     componentDidMount(){
-        console.log(this.props);
         
+        //create a payment intent
         axios.post('/payments/create-payment-intent', {items:this.props.cartData})
         .then( (response) => {
-            this.setState({secret: response.data.clientSecret});     
-            console.log(response.data);           
+            this.setState({secret: response.data.clientSecret});                  
         })
-        .catch( (error) => console.error('Unable to begin payment process', error) );
-        
-       
+        .catch( (error) => {
+            this.setState({error: "Something went wrong. Unable to process payment at the moment."});
+            console.error(error);        
+        });
+               
     }
+
 
     handleSubmit = async(event) => {
         event.preventDefault();
+    
+        //get vars
+        const {stripe, elements, user} = this.props;
 
-        const {stripe, elements, cartData, user} = this.props;
-        console.log(this.props);
-
-        if(!stripe || !elements){
+        //return if any of the required props are not set
+        if(!stripe || !elements || !user || !this.state.canSubmit){
             return;
         }
 
+        //disable form submission until process is complete and clear errors
+        this.setState(
+            {
+                canSubmit: false,
+                error: '',
+            }
+        );
+
+        //confirm card payment
         const result = await stripe.confirmCardPayment(this.state.secret, {
             payment_method: {
                 card: elements.getElement(CardElement),
                 billing_details:{
-                    name: user.userData.FirstName,
+                    name: user.userData.firstName,
                 },
             }
         });
 
+
         if(result.error){
-            console.error(result.error.message);
+            this.setState( {
+                error: result.error.message,
+                canSubmit: true,
+            })
         } else{
-            if(result.paymentIntent.status === 'succeeded'){
-                console.log('payment went through');
+            if(result.paymentIntent.status === 'succeeded'){                                                                
+                //decrease quantity of stock
+                console.log(result.paymentIntent);
+
+                //save transaction details - tied to login user
+                //remove cart cookie
             }
         }
     };
 
     render(){
-        return (
-            
-            <form onSubmit={this.handleSubmit}>
-                <CardSection />
-                <button disabled={!this.props.stripe || !this.state.secret}>Confirm order</button>
-            </form>
-        );
-    }
 
+            return (                        
+                <form onSubmit={this.handleSubmit}>
+                    <CardSection />
+                     {this.state.canSubmit ? <button className="submitPaymentButton" disabled={!this.props.stripe || !this.state.secret || !this.state.canSubmit}>Confirm order</button> : <div>Processing payment!<span className="loader-element"></span></div> }
+                    <PaymentError error={this.state.error}/>
+                </form>
+            );
+        /* else{
+            return(
+                <div>Processing payment!<span className="loader-element"></span></div>
+            );
+        }*/
+        
+    }
     
 }
 
@@ -81,8 +120,7 @@ class Checkout extends React.Component{
         super(props);       
     }
 
-    render(){
-        
+    render(){        
         //if cart is empty - show message, else show the payment form
         if(this.props.cartData.length <= 0){
             return <div>Cart is empty</div>;
@@ -101,9 +139,7 @@ class Checkout extends React.Component{
                     </div>                
                 </div>
             );
-        }
-
-        
+        }        
     }
 }
 
