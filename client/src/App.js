@@ -4,6 +4,7 @@ import {CookiesProvider, withCookies} from 'react-cookie';
 import Home from './components/home';
 import UserBar from './components/user';
 import Checkout from './components/checkout';
+import PurchaseConfirmation from './components/purchase-confirmation';
 
 
 
@@ -114,15 +115,54 @@ class App extends React.Component {
 
 
   render(){
+
     return (
+      
       <CookiesProvider>
         <Router>
-    
-          <UserBar user={this.state.user} updateUser={this.updateUser} cartData={this.state.cart} removeFromCart={this.removeFromCart}/> 
+  
+          <UserBar 
+            user={this.state.user} 
+            updateUser={this.updateUser} 
+            cartData={this.state.cart} 
+            removeFromCart={this.removeFromCart}
+            props={{...this.props}}
+            location={this.props.location}
+          /> 
+         
 
           {/* Routes */}
-          <Route exact={true} path="/" render={ () => ( <Home cartData={this.state.cart} addToCart={this.addToCart} /> ) } />   
-          <Route exact={true} path="/checkout" render={ () => (<Checkout cartData={this.state.cart} removeCartData={this.removeCartData} user={this.state.user} />) } />
+          <Route exact={true}
+             path="/" 
+             render={ 
+              () => ( 
+                <Home 
+                  cartData={this.state.cart} 
+                  addToCart={this.addToCart} 
+                /> 
+              )} 
+          />
+
+          <Route 
+            exact={true} 
+            path="/checkout" 
+            render={ 
+              ({location}) => (
+                <Checkout 
+                  location={location}
+                  cartData={this.state.cart} 
+                  removeCartData={this.removeCartData} 
+                  user={this.state.user} 
+                />
+              )} 
+            />
+
+            <Route
+              exact={true}
+              path="/payment-confirmation"
+              component={PurchaseConfirmation}
+            />
+
         </Router>
       </CookiesProvider>
       /*

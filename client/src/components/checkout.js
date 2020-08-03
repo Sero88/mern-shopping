@@ -36,13 +36,11 @@ class PaymentForm extends React.Component{
         };
     }
 
-    componentDidMount(){
-        
+    componentDidMount(){       
         //create a payment intent
         axios.post('/payments/create-payment-intent', {items:this.props.cartData})
         .then( (response) => {
             this.setState({secret: response.data.clientSecret});    
-            console.log(response.data);             
         })
         .catch( (error) => {
             this.setState({error: "Something went wrong. Unable to process payment at the moment."});
@@ -56,11 +54,6 @@ class PaymentForm extends React.Component{
     handleSubmit = async(event) => {
         event.preventDefault();
 
-       /*  const serverData = await axios.post('/purchases', {});
-        console.log(serverData.data);
-
-        return;*/
-    
         //get vars
         const {stripe, elements, user} = this.props;
 
@@ -114,7 +107,7 @@ class PaymentForm extends React.Component{
         }
     };
 
-    render(){
+    render(){       
         return (                        
             <form onSubmit={this.handleSubmit}>
                 <CardSection />
@@ -180,6 +173,5 @@ class Checkout extends React.Component{
         }        
     }
 }
-
 
 export default Checkout;

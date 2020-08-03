@@ -1,4 +1,5 @@
 import React from 'react';
+import {useLocation} from 'react-router-dom';
 
 class Cart extends React.Component{
     constructor(props){
@@ -6,6 +7,7 @@ class Cart extends React.Component{
     }
     
     render(){
+       
         return(
             <div className="cart">
                 <div className="items-container">

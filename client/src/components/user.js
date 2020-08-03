@@ -1,6 +1,6 @@
 import React, {Suspense} from 'react';
 import axios from 'axios';
-//import Cart from './cart';
+import {withRouter} from 'react-router-dom';
 const Cart = React.lazy( () => import('./cart') ); 
 
 function CurrentUser(props){
@@ -20,7 +20,8 @@ function UserLogin(props){
 
 class UserBar extends React.Component{
     constructor(props){
-        super(props);    
+        super(props);   
+        this.excludeCartPages = ['/checkout'];
     }
 
     async makeApiCall(){
@@ -44,17 +45,25 @@ class UserBar extends React.Component{
             .catch( (e) => console.error(e));
     }
 
+    loadCart(){
+        return(
+            <Suspense fallback={<div>Loading...</div>}>
+                <Cart cartData={this.props.cartData} removeFromCart={this.props.removeFromCart} />
+            </Suspense>
+        );
+    }
+
     render(){
+        //console.log(this.props);
+        const {location} = this.props;
         return (
             <div>
                 <CurrentUser username={this.props.user.userData.firstName} />
                 <UserLogin authenticated={this.props.user.authenticated} />
-                <Suspense fallback={<div>Loading...</div>}>
-                    <Cart cartData={this.props.cartData} removeFromCart={this.props.removeFromCart} />
-                </Suspense>                               
+                { ( !this.excludeCartPages.includes(location.pathname) ) && this.loadCart() }                         
             </div>
         );
     }
 }
 
-export default UserBar;
+export default withRouter(UserBar);
