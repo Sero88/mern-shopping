@@ -22,12 +22,5 @@ Product.reduceStock = (items) => {
         product[0].save({timestamps: false});
     })
 }
-/*
-User.findOneAndUpdate({thirdPartyId: profile.id}, user, {upsert:true, new:true}, 
-    (err, doc) => {
-        console.log('saved', doc);
-        return cb(null, doc);
-    }
-);*/
 
 module.exports = Product;

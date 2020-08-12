@@ -3,6 +3,7 @@ import {loadStripe} from "@stripe/stripe-js";
 import {Elements, CardElement, ElementsConsumer} from "@stripe/react-stripe-js";
 import axios from 'axios';
 import {Redirect} from 'react-router-dom';
+import CartTotal from './cart-total';
 
 //load stripe
 const promise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
@@ -39,10 +40,11 @@ class PaymentForm extends React.Component{
     componentDidMount(){       
         //create a payment intent
         axios.post('/payments/create-payment-intent', {items:this.props.cartData})
-        .then( (response) => {
+        .then( (response) => {                        
             this.setState({secret: response.data.clientSecret});    
+            this.props.updateTotal(response.data.total);
         })
-        .catch( (error) => {
+        .catch( (error) => {            
             this.setState({error: "Something went wrong. Unable to process payment at the moment."});
             console.error(error);        
         });
@@ -110,6 +112,7 @@ class PaymentForm extends React.Component{
     render(){       
         return (                        
             <form onSubmit={this.handleSubmit}>
+                <p>To test, pay with test card: 4242 4242 4242 4242</p>
                 <CardSection />
                     {this.state.canSubmit ? <button className="submitPaymentButton" disabled={!this.props.stripe || !this.state.secret || !this.state.canSubmit}>Confirm order</button> : <div>Processing payment!<span className="loader-element"></span></div> }
                 <PaymentError error={this.state.error}/>
@@ -123,13 +126,20 @@ class Checkout extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            purchaseComplete: false
+            purchaseComplete: false,
+            total: '',
         }     
     }
 
     purchaseComplete =  () => {
         this.setState({
             purchaseComplete: true
+        })
+    }
+
+    updateTotal = (total) => {
+        this.setState({
+            total: total
         })
     }
 
@@ -152,6 +162,9 @@ class Checkout extends React.Component{
             return(
                 <div className="page-container">
                     <h1>Checkout</h1>
+                    <div className="total-container">
+                        <CartTotal cartData={this.props.cartData} total={this.state.total}/>
+                    </div>                    
                     <div className="payment-form">
                         <Elements stripe={promise}> 
                             <ElementsConsumer>
@@ -163,6 +176,7 @@ class Checkout extends React.Component{
                                         user={this.props.user} 
                                         removeCartData={this.props.removeCartData} 
                                         purchaseComplete={this.purchaseComplete}
+                                        updateTotal={this.updateTotal}
                                     />
                                 )}
                             </ElementsConsumer>                                    

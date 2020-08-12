@@ -18,12 +18,11 @@ function ProductDescription(props){
 }
 
 function AddProductButton(props){
-    console.log(props);
     //check to see if item is in cart - get the quantity in cart  
     const itemIndex = props.cartData.findIndex( (cartItem) => "itemData" in cartItem && cartItem.itemData._id === props.productData._id );
     const cartQuantity = itemIndex >= 0  ? props.cartData[itemIndex].quantity : 0;
     
-    // can the add item button can be displayed - must not go over stock quantity  
+    // can the add item buttonbe displayed - must not go over stock quantity  
     if(props.productData.stock > 0  && props.productData.stock > cartQuantity){
         return <button onClick={()=>(props.addToCart({...props.productData}))}>Add to cart</button>
     } else{
@@ -93,7 +92,6 @@ class ProductGallery extends React.Component{
 
     render(){
         const products = [];  
-        console.log(this.state.products);
         if(this.state.products && this.state.products.length){
          this.state.products.forEach(        
             (product, index) => {                           

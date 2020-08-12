@@ -38,7 +38,6 @@ class UserBar extends React.Component{
         this.makeApiCall()
             .then( (userData) => {
                 if(userData && 'firstName' in userData){
-                    console.log(userData);
                     this.props.updateUser(userData, true);
                 }                
             })

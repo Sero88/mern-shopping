@@ -3,7 +3,6 @@ const Product = require('../models/product.model');
 
 
 router.route('/test').get( (req, res) => {
-    console.log(req.user);
    
    res.json('done ' + req.isAuthenticated());
 });

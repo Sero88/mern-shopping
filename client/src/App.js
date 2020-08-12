@@ -7,7 +7,6 @@ import Checkout from './components/checkout';
 import PurchaseConfirmation from './components/purchase-confirmation';
 
 
-
 import './App.css';
 
 class App extends React.Component {
@@ -93,7 +92,6 @@ class App extends React.Component {
       cart: cartData
     });
     
-    console.log(cartData);
   }
 
 

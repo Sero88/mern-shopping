@@ -24,10 +24,8 @@ module.exports = (app) => {
                 lastLogin: new Date()
             }
 
-            console.log(user);
             User.findOneAndUpdate({thirdPartyId: profile.id}, user, {upsert:true, new:true}, 
                 (err, doc) => {
-                    console.log('saved', doc);
                     return cb(null, doc);
                 }
             );
