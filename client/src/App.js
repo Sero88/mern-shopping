@@ -1,13 +1,15 @@
-import React from 'react';
+import React, {Suspense, lazy} from 'react';
 import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import {CookiesProvider, withCookies} from 'react-cookie';
 import Home from './components/home';
 import UserBar from './components/user';
-import Checkout from './components/checkout';
 import PurchaseConfirmation from './components/purchase-confirmation';
-
-
 import './App.css';
+
+const Checkout = lazy(() => import('./components/checkout'));
+
+
+
 
 class App extends React.Component {
   constructor(props){
@@ -114,11 +116,14 @@ class App extends React.Component {
 
   render(){
 
+    const MainContext = React.createContext(this.state);
+
     return (
       
       <CookiesProvider>
         <Router>
-  
+          <Suspense fallback={<div>Loading...</div>} >
+          <MainContext.Provider value={this.state}>
           <UserBar 
             user={this.state.user} 
             updateUser={this.updateUser} 
@@ -160,30 +165,10 @@ class App extends React.Component {
               path="/payment-confirmation"
               component={PurchaseConfirmation}
             />
-
+            </MainContext.Provider>
+        </Suspense>      
         </Router>
       </CookiesProvider>
-      /*
-           <div className="App">
-        <header className="App-header">
-          <p>
-            Name of Store with Logo
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React {props.myVar}
-          </a>
-        </header>
-        <main>
-          <Products />
-        </main>
-      </div>
-      */
-  
     );
   }
   

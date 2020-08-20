@@ -53,7 +53,6 @@ class UserBar extends React.Component{
     }
 
     render(){
-        //console.log(this.props);
         const {location} = this.props;
         return (
             <div>

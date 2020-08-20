@@ -10,7 +10,6 @@ function CartTotal(props){
             </tr>
         );
     });
-    console.log(items);
     return (
         <div>
             <table>
