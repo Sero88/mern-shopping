@@ -1,5 +1,5 @@
 import React from 'react';
-
+import CartTotal from './cart-total';
 
 class Cart extends React.Component{
     constructor(props){
@@ -7,19 +7,16 @@ class Cart extends React.Component{
     }
     
     render(){
-       
+
         return(
+
             <div className="cart">
-                <div className="items-container">
-                    {this.props.cartData.map(
-                        (item) => (
-                            <div className="cartItem" key={'cart'+item.itemData.name} > 
-                                <p>{item.itemData.name} <span>qty.{item.quantity}</span></p>                        
-                                <button onClick={() => this.props.removeFromCart(item)}>Remove Item </button>                     
-                                </div>
-                        )
-                    )}
-                </div>
+                <CartTotal 
+                    cartData={this.props.cartData} 
+                    allowModify={true}
+                    addToCart={this.props.addToCart}
+                    removeFromCart={this.props.removeFromCart}
+                />
                 <a href="/checkout">Checkout</a>
             </div>
         );

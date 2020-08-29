@@ -163,7 +163,7 @@ class Checkout extends React.Component{
                 <div className="page-container">
                     <h1>Checkout</h1>
                     <div className="total-container">
-                        <CartTotal cartData={this.props.cartData} total={this.state.total}/>
+                        <CartTotal cartData={this.props.cartData} total={this.state.total} allowModify={false}/>
                     </div>                    
                     <div className="payment-form">
                         <Elements stripe={promise}> 

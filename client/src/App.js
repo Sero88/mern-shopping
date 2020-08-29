@@ -4,12 +4,9 @@ import {CookiesProvider, withCookies} from 'react-cookie';
 import Home from './components/home';
 import UserBar from './components/user';
 import PurchaseConfirmation from './components/purchase-confirmation';
-import './App.css';
+import './App.scss';
 
 const Checkout = lazy(() => import('./components/checkout'));
-
-
-
 
 class App extends React.Component {
   constructor(props){
@@ -24,6 +21,7 @@ class App extends React.Component {
     this.removeFromCart = this.removeFromCart.bind(this);
     this.removeCartData = this.removeCartData.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.setQuantity = this.setQuantity.bind(this);
   }
 
 
@@ -45,8 +43,10 @@ class App extends React.Component {
     //get the cookie    
     const cartData = this.state.cart;
 
+    console.log(item);
+
     //does the item already exist - if so increase cart quantity, else add to cart
-    const itemIndex = cartData.findIndex( (cartItem) => "itemData" in cartItem && cartItem.itemData._id === item._id );
+    const itemIndex = cartData.findIndex( (cartItem) => item._id == cartItem.itemData._id );
 
     if(itemIndex >= 0){
       //item.stock <= cartData[itemIndex].quantity + 1 ? cartData[itemIndex].quantity++ : 
@@ -74,7 +74,7 @@ class App extends React.Component {
     const cartData = this.state.cart;
     
     //get the item's cart index 
-    const itemIndex = cartData.findIndex( (item) => item.itemData._id == item.itemData._id);
+    const itemIndex = cartData.findIndex( (cartItem) => cartItem.itemData._id == item.itemData._id);
 
     if(itemIndex >= 0){
       const quantity = cartData[itemIndex].quantity;
@@ -84,18 +84,47 @@ class App extends React.Component {
       } else{
         cartData.splice(itemIndex, 1);
       }
+
+      //set the cookie
+      const {cookies} = this.props;
+      cookies.set(this.cartCookie, cartData, {path: '/', sameSite:'strict'});   
+      
+      this.setState({
+        cart: cartData
+      });
     }    
 
-    //set the cookie
-    const {cookies} = this.props;
-    cookies.set(this.cartCookie, cartData, {path: '/', sameSite:'strict'});   
-    
-    this.setState({
-      cart: cartData
-    });
-    
   }
 
+
+  setQuantity(event, item){
+    event.preventDefault();
+    const cartData = this.state.cart;
+    const input = event.target.value;
+
+    
+    //get the item's cart index 
+    const itemIndex = cartData.findIndex( (cartItem) => cartItem.itemData._id == item.itemData._id);
+
+    if(itemIndex >= 0){
+      const quantity = cartData[itemIndex].quantity;
+
+      if(input >= 1){
+        cartData[itemIndex].quantity = input
+      } else{
+        cartData.splice(itemIndex, 1);
+      }
+
+      //set the cookie
+      const {cookies} = this.props;
+      cookies.set(this.cartCookie, cartData, {path: '/', sameSite:'strict'});   
+      
+      this.setState({
+        cart: cartData
+      });
+    }    
+
+  }
 
   removeCartData(){
     const {cookies} = this.props;
@@ -116,24 +145,26 @@ class App extends React.Component {
 
   render(){
 
-    const MainContext = React.createContext(this.state);
-
     return (
       
       <CookiesProvider>
         <Router>
           <Suspense fallback={<div>Loading...</div>} >
-          <MainContext.Provider value={this.state}>
-          <UserBar 
-            user={this.state.user} 
-            updateUser={this.updateUser} 
-            cartData={this.state.cart} 
-            removeFromCart={this.removeFromCart}
-            props={{...this.props}}
-            location={this.props.location}
-          /> 
+          <header>
+            <UserBar 
+              user={this.state.user} 
+              updateUser={this.updateUser} 
+              cartData={this.state.cart} 
+              removeFromCart={this.removeFromCart}
+              setQuantity = {this.setQuantity}
+              addToCart={this.addToCart}
+              props={{...this.props}}
+              location={this.props.location}
+            /> 
+          </header>
+          
          
-
+          <main>
           {/* Routes */}
           <Route exact={true}
              path="/" 
@@ -165,7 +196,9 @@ class App extends React.Component {
               path="/payment-confirmation"
               component={PurchaseConfirmation}
             />
-            </MainContext.Provider>
+          </main>
+          
+        
         </Suspense>      
         </Router>
       </CookiesProvider>

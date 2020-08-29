@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import AddProductButton from './cart-add-button';
 
 function ProductImage(props){
     return (
@@ -17,18 +18,7 @@ function ProductDescription(props){
     );
 }
 
-function AddProductButton(props){
-    //check to see if item is in cart - get the quantity in cart  
-    const itemIndex = props.cartData.findIndex( (cartItem) => "itemData" in cartItem && cartItem.itemData._id === props.productData._id );
-    const cartQuantity = itemIndex >= 0  ? props.cartData[itemIndex].quantity : 0;
-    
-    // can the add item buttonbe displayed - must not go over stock quantity  
-    if(props.productData.stock > 0  && props.productData.stock > cartQuantity){
-        return <button onClick={()=>(props.addToCart({...props.productData}))}>Add to cart</button>
-    } else{
-        return <p>Out of Stock</p>
-    }
-}
+
 
 function Product(props){
     return(
@@ -48,10 +38,9 @@ function Product(props){
 
             <AddProductButton 
                 addToCart={props.addToCart} 
-                stock={props.productData.stock} 
                 productData={props.productData} 
-                cartData={props.cartData}    
-            />
+                cartData={props.cartData}
+            > Add to Cart </AddProductButton>
            
         </div>        
     );

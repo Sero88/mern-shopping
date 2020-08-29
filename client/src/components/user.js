@@ -47,7 +47,11 @@ class UserBar extends React.Component{
     loadCart(){
         return(
             <Suspense fallback={<div>Loading...</div>}>
-                <Cart cartData={this.props.cartData} removeFromCart={this.props.removeFromCart} />
+                <Cart 
+                    cartData={this.props.cartData} 
+                    removeFromCart={this.props.removeFromCart} 
+                    addToCart={this.props.addToCart}
+                    setQuantity={this.props.setQuantity} />
             </Suspense>
         );
     }
@@ -55,7 +59,7 @@ class UserBar extends React.Component{
     render(){
         const {location} = this.props;
         return (
-            <div>
+            <div className="user-bar">
                 <CurrentUser username={this.props.user.userData.firstName} />
                 <UserLogin authenticated={this.props.user.authenticated} />
                 { ( !this.excludeCartPages.includes(location.pathname) ) && this.loadCart() }                         
