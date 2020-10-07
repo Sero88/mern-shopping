@@ -1,7 +1,5 @@
 import React, {Suspense} from 'react';
 import axios from 'axios';
-import {withRouter} from 'react-router-dom';
-const Cart = React.lazy( () => import('./cart') ); 
 
 function CurrentUser(props){
     return (
@@ -20,8 +18,7 @@ function UserLogin(props){
 
 class UserBar extends React.Component{
     constructor(props){
-        super(props);   
-        this.excludeCartPages = ['/checkout'];
+        super(props);           
     }
 
     async makeApiCall(){
@@ -44,28 +41,17 @@ class UserBar extends React.Component{
             .catch( (e) => console.error(e));
     }
 
-    loadCart(){
-        return(
-            <Suspense fallback={<div>Loading...</div>}>
-                <Cart 
-                    cartData={this.props.cartData} 
-                    removeFromCart={this.props.removeFromCart} 
-                    addToCart={this.props.addToCart}
-                    setQuantity={this.props.setQuantity} />
-            </Suspense>
-        );
-    }
 
     render(){
-        const {location} = this.props;
+        
         return (
             <div className="user-bar">
                 <CurrentUser username={this.props.user.userData.firstName} />
                 <UserLogin authenticated={this.props.user.authenticated} />
-                { ( !this.excludeCartPages.includes(location.pathname) ) && this.loadCart() }                         
+                                    
             </div>
         );
     }
 }
 
-export default withRouter(UserBar);
+export default UserBar;
