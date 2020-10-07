@@ -4,7 +4,10 @@ import {CookiesProvider, withCookies} from 'react-cookie';
 import Home from './components/home';
 import UserBar from './components/user';
 import PurchaseConfirmation from './components/purchase-confirmation';
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.scss';
+
 
 const Checkout = lazy(() => import('./components/checkout'));
 const Cart = React.lazy( () => import('./components/cart') ); 
@@ -174,38 +177,42 @@ class App extends React.Component {
           </header>
           
          
-          <main>
-            {/* Routes */}
-            <Route exact={true}
-              path="/" 
-              render={ 
-                () => ( 
-                  <Home 
-                    cartData={this.state.cart} 
-                    addToCart={this.addToCart} 
-                  /> 
-                )} 
-            />
+          <main className="container">
+            <div className="row">
+              <div className="col">
+                 {/* Routes */}
+                <Route exact={true}
+                  path="/" 
+                  render={ 
+                    () => ( 
+                      <Home 
+                        cartData={this.state.cart} 
+                        addToCart={this.addToCart} 
+                      /> 
+                    )} 
+                />
 
-            <Route 
-              exact={true} 
-              path="/checkout" 
-              render={ 
-                ({location}) => (
-                  <Checkout 
-                    location={location}
-                    cartData={this.state.cart} 
-                    removeCartData={this.removeCartData} 
-                    user={this.state.user} 
+                <Route 
+                  exact={true} 
+                  path="/checkout" 
+                  render={ 
+                    ({location}) => (
+                      <Checkout 
+                        location={location}
+                        cartData={this.state.cart} 
+                        removeCartData={this.removeCartData} 
+                        user={this.state.user} 
+                      />
+                    )} 
                   />
-                )} 
-              />
 
-              <Route
-                exact={true}
-                path="/payment-confirmation"
-                component={PurchaseConfirmation}
-              />
+                  <Route
+                    exact={true}
+                    path="/payment-confirmation"
+                    component={PurchaseConfirmation}
+                  />
+                  </div>                    
+            </div>
           </main>
           
         

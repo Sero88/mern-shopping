@@ -4,7 +4,7 @@ import AddProductButton from './cart-add-button';
 
 function ProductImage(props){
     return (
-        <img src={'/images/art/' + props.imageName} alt={props.imageTitle} />
+        <img className="card-img-top" src={'/images/art/' + props.imageName} alt={props.imageTitle} />
     );
 }
 
@@ -22,11 +22,14 @@ function ProductDescription(props){
 
 function Product(props){
     return(
-        <div className="product">
-            <ProductImage 
+        <div className="product col-12">
+            <div className="card">
+            <ProductImage         
                 imageName={props.productData.imageName} 
                 imageTitle={props.productData.name} 
             />
+                <div className="card-body">
+                
 
             <ProductDescription 
                 title={props.productData.name} 
@@ -41,6 +44,10 @@ function Product(props){
                 productData={props.productData} 
                 cartData={props.cartData}
             > Add to Cart </AddProductButton>
+                </div>
+            
+            </div>
+            
            
         </div>        
     );
@@ -97,7 +104,7 @@ class ProductGallery extends React.Component{
            products.push(<p className="error">Something went wrong. Unable to retrieve products.</p>)
         }
 
-        return <div className="product-gallery">{products}</div>
+        return <div className="product-gallery row row-cols-md-3">{products}</div>
     }
 }
 

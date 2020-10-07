@@ -12,7 +12,7 @@ class Home extends React.Component{
             <div>
                 <h1>Shop</h1>
                 <Suspense fallback={<div>Loading products...</div>}>
-                    <ProductGallery cartData={this.props.cartData} addToCart={this.props.addToCart}/>
+                    <ProductGallery cartData={this.props.cartData} addToCart={this.props.addToCart}/>                    
                 </Suspense> 
             </div>
             
