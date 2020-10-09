@@ -39,7 +39,7 @@ function CartTotal(props){
         );
     });
     return (
-        <div>
+        <div className="cart-total">
             <table>
             <thead>   
                 <tr>

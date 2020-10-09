@@ -11,7 +11,7 @@ function UserLogin(props){
     if(props.authenticated){
         return '';
     } else{
-        return <a href="/auth/google/">Login</a>
+        return <a className="btn btn-link" href="/auth/google/">Login</a>
     }
 }
 
@@ -47,8 +47,7 @@ class UserBar extends React.Component{
         return (
             <div className="user-bar">
                 <CurrentUser username={this.props.user.userData.firstName} />
-                <UserLogin authenticated={this.props.user.authenticated} />
-                                    
+                <UserLogin authenticated={this.props.user.authenticated} />                                                    
             </div>
         );
     }

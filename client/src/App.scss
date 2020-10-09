@@ -13,6 +13,26 @@
     }
   }
 }
+
+.cart{
+  position: relative;
+  z-index: 10;
+  .cart-total{
+    display: none;
+    position: absolute;
+  }
+
+  table{
+    width: 100%;
+    text-align: left;
+
+    th{
+      text-align: left;
+    }
+
+  }
+}
+
 .loader-element {
   width: 20px;
   height: 20px;

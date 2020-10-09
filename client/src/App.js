@@ -169,11 +169,23 @@ class App extends React.Component {
         <Router>
           <Suspense fallback={<div>Loading...</div>} >
           <header>
-            <UserBar 
-              user={this.state.user} 
-              updateUser={this.updateUser}                    
-            /> 
-           {this.loadCart()}
+            <div className="container">
+                <div className="row justify-content-end no-gutters">
+                  <div className="col-sm-8 text-right">
+                    <UserBar 
+                    user={this.state.user} 
+                    updateUser={this.updateUser}                    
+                    />
+                  </div>                 
+                  
+                    <div className="col-sm-4">                
+                      {this.loadCart()}                                               
+                   </div>
+             
+            </div>
+            </div>
+            
+            
           </header>
           
          
