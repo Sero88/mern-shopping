@@ -11,8 +11,9 @@ function ProductImage(props){
 function ProductDescription(props){
     return (
         <div className="product-description">
-            <p>{props.price}</p>
-            <p>{props.title} - <span>{props.artist}</span></p>
+            <p className="text-right">${props.price}</p>
+            <h2 className="h5 mb-0">{props.title}</h2>
+            <p><span><em>{props.artist}</em></span></p>
             <p>{props.description}</p>            
         </div>
     );
@@ -22,8 +23,8 @@ function ProductDescription(props){
 
 function Product(props){
     return(
-        <div className="product col-12">
-            <div className="card">
+        <div className="product col-12  mb-4">
+            <div className="card h-100">
             <ProductImage         
                 imageName={props.productData.imageName} 
                 imageTitle={props.productData.name} 
@@ -43,6 +44,7 @@ function Product(props){
                 addToCart={props.addToCart} 
                 productData={props.productData} 
                 cartData={props.cartData}
+                className="btn btn-secondary"
             > Add to Cart </AddProductButton>
                 </div>
             
@@ -104,7 +106,7 @@ class ProductGallery extends React.Component{
            products.push(<p className="error">Something went wrong. Unable to retrieve products.</p>)
         }
 
-        return <div className="product-gallery row row-cols-md-3">{products}</div>
+        return <div className="product-gallery row row-cols-md-2">{products}</div>
     }
 }
 

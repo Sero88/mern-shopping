@@ -23,13 +23,27 @@ class Cart extends React.Component{
         const cartTotal = document.querySelector('.cart-total');
         cartTotal.style.display = "none";
     }
+
+    getTotalQuantity = () => {
+        
+        const total = this.props.cartData.reduce( (total, item) => {        
+            total += item.quantity;       
+            return total; 
+        }, 0);
+        
+        return total;
+        
+    }
     
     render(){
-       
+        const cartTotalQuantity = this.getTotalQuantity();
         if( !this.excludeCartPages.includes(this.props.location.pathname))
             return(                               
-                <div className="cart" onMouseEnter={this.showTotal} onMouseLeave={this.hideTotal}>
-                    <span className="btn btn-link"><FontAwesomeIcon icon={faShoppingCart} onClick={this.showTotal}/></span>
+                <div className="cart d-flex" onMouseEnter={this.showTotal} onMouseLeave={this.hideTotal}>
+                    <div className="cart-icon">
+                        <span className="btn btn-link"><FontAwesomeIcon icon={faShoppingCart} onClick={this.showTotal}/></span>
+                        {cartTotalQuantity > 0 && <span className="cart-count">{this.getTotalQuantity()}</span>}
+                    </div>
 
                     <CartTotal 
                         cartData={this.props.cartData} 
@@ -37,6 +51,7 @@ class Cart extends React.Component{
                         addToCart={this.props.addToCart}
                         removeFromCart={this.props.removeFromCart}
                     />
+                    
                     <a className="btn btn-link" href="/checkout">Checkout</a>
                 </div>
             );

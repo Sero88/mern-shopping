@@ -20,7 +20,7 @@ function PurchaseConfirmation(){
         <div className="page-container">
             <h1>Purchase Complete</h1>
             <p>Your order has been submitted. Thank you!</p>
-            <p>Page: {location.pathname}</p>            
+            
         </div>    
     );
 }

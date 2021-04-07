@@ -111,7 +111,7 @@ class PaymentForm extends React.Component{
 
     render(){       
         return (                        
-            <form onSubmit={this.handleSubmit}>
+            <form onSubmit={this.handleSubmit} className="col-12 col-sm-4">
                 <p>To test, pay with test card: 4242 4242 4242 4242</p>
                 <CardSection />
                     {this.state.canSubmit ? <button className="submitPaymentButton" disabled={!this.props.stripe || !this.state.secret || !this.state.canSubmit}>Confirm order</button> : <div>Processing payment!<span className="loader-element"></span></div> }

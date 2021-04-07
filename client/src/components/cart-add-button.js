@@ -7,9 +7,9 @@ function AddProductButton(props){
     
     // can the add item button be displayed - must not go over stock quantity  
     if(props.productData.stock > 0  && props.productData.stock > cartQuantity){
-        return <button onClick={()=>(props.addToCart({...props.productData}))}>{props.children}</button>
+        return <button className={props.className} onClick={()=>(props.addToCart({...props.productData}))}>{props.children}</button>
     } else{
-        return <button disabled={true}>{props.children}</button>
+        return <button className={props.className} disabled={true}>{props.children}</button>
     }
 }
 

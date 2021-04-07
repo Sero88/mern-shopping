@@ -170,26 +170,20 @@ class App extends React.Component {
           <Suspense fallback={<div>Loading...</div>} >
           <header>
             <div className="container">
-                <div className="row justify-content-end no-gutters">
-                  <div className="col-sm-8 text-right">
-                    <UserBar 
+                <div className="row no-gutters">                 
+                    <nav className="menu col-6 d-flex">
+                      <a class="btn btn-link" href="/">Home</a>
+                      {this.loadCart()}
+                    </nav>                                                    
+                     <UserBar 
                     user={this.state.user} 
                     updateUser={this.updateUser}                    
-                    />
-                  </div>                 
-                  
-                    <div className="col-sm-4">                
-                      {this.loadCart()}                                               
-                   </div>
-             
-            </div>
-            </div>
-            
-            
+                    />                                                              
+                  </div>
+            </div>                        
           </header>
-          
-         
-          <main className="container">
+                             
+          <main className="container px-4">
             <div className="row">
               <div className="col">
                  {/* Routes */}

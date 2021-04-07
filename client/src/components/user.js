@@ -45,7 +45,7 @@ class UserBar extends React.Component{
     render(){
         
         return (
-            <div className="user-bar">
+            <div className="user-bar col-12 col-sm-6 text-sm-right">
                 <CurrentUser username={this.props.user.userData.firstName} />
                 <UserLogin authenticated={this.props.user.authenticated} />                                                    
             </div>
